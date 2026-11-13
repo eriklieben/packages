@@ -1,0 +1,45 @@
+# Packages the prebuilt Linux release of erikterm (https://github.com/eriklieben/erikterm).
+pkgname=erikterm
+_tag=1.0.0
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="GPU terminal with tabs, splits, git worktrees and coding-agent status"
+arch=(x86_64)
+url="https://github.com/eriklieben/erikterm"
+license=(MIT)
+depends=(sdl3 freetype2 harfbuzz)
+makedepends=(ncurses)
+optdepends=(
+    'git: worktrees, compare and merge'
+    'fontconfig: font lookup'
+    'neovim: editing conflicts, open file links'
+)
+options=(!strip !debug)
+source=("erikterm-linux-x64-$_tag.tar.gz::https://github.com/eriklieben/packages/releases/download/erikterm-v$_tag/erikterm-linux-x64.tar.gz")
+sha256sums=('2e627e8a4af5e703063739198331e940cdb17b9cd3c96fe4822013d2e79d364a')
+
+package() {
+    cd erikterm
+
+    install -Dm755 erikterm "$pkgdir/usr/bin/erikterm"
+    install -Dm644 share/erikterm.desktop "$pkgdir/usr/share/applications/erikterm.desktop"
+
+    local size
+    for size in 16 24 32 48 64 128 256 512; do
+        install -Dm644 "share/icons/png/erikterm-$size.png" "$pkgdir/usr/share/icons/hicolor/${size}x${size}/apps/erikterm.png"
+    done
+    install -Dm644 share/icons/erikterm.svg "$pkgdir/usr/share/icons/hicolor/scalable/apps/erikterm.svg"
+    install -Dm644 share/icons/erikterm-symbolic.svg "$pkgdir/usr/share/icons/hicolor/symbolic/apps/erikterm-symbolic.svg"
+
+    # The terminfo entry, so TERM=xterm-erikterm and its underline styles work from the first run.
+    install -d "$pkgdir/usr/share/terminfo"
+    tic -x -o "$pkgdir/usr/share/terminfo" share/terminfo/erikterm.terminfo
+
+    install -d "$pkgdir/usr/share/erikterm"
+    cp -r share/shell share/nvim share/claude "$pkgdir/usr/share/erikterm/"
+
+    install -Dm644 LICENSE "$pkgdir/usr/share/licenses/erikterm/LICENSE"
+    install -Dm644 THIRD-PARTY-NOTICES.md "$pkgdir/usr/share/licenses/erikterm/THIRD-PARTY-NOTICES.md"
+    install -Dm644 README.md "$pkgdir/usr/share/doc/erikterm/README.md"
+    install -Dm644 erikterm.example.toml "$pkgdir/usr/share/doc/erikterm/erikterm.example.toml"
+}

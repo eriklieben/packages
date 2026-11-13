@@ -1,0 +1,20 @@
+{
+    "version": "1.0.0",
+    "description": "GPU terminal with tabs, splits, git worktrees and coding-agent status",
+    "homepage": "https://github.com/eriklieben/erikterm",
+    "license": "MIT",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/eriklieben/packages/releases/download/erikterm-v1.0.0/erikterm-win-x64.zip",
+            "hash": "d8e1e204b52a0f1b5a7d26e94c857187ae0dae3202ead5e02c7e5937a9240b71"
+        }
+    },
+    "extract_dir": "erikterm",
+    "bin": "erikterm.exe",
+    "shortcuts": [
+        [
+            "erikterm.exe",
+            "Erik's Terminal"
+        ]
+    ]
+}
